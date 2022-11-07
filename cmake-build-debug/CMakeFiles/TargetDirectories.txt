@@ -1,0 +1,3 @@
+C:/Users/itach/CLionProjects/inf3105-tp2-a22/cmake-build-debug/CMakeFiles/inf3105_tp2_a22.dir
+C:/Users/itach/CLionProjects/inf3105-tp2-a22/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/itach/CLionProjects/inf3105-tp2-a22/cmake-build-debug/CMakeFiles/rebuild_cache.dir
