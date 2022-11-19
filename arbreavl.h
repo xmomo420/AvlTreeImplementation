@@ -75,17 +75,26 @@ class ArbreAVL {
 			Noeud * droite;
 		};
 		Noeud * racine;
+
 		/**** Vous pouvez ajouter toute fonction privée nécessaire **********************/
 		/**** N'oubliez d'expliquer son fonctionnement en commentaire *******************/
 		/**** Ça s'applique également sur les attributs privés de le classe Itérateur ***/
+        bool inserer(Noeud*&, const T&);
+        bool contient(Noeud *, const T&) const;
+        bool enlever(Noeud *&, const T&);
+        void rotationGaucheDroite(Noeud*&);
+        void rotationDroiteGauche(Noeud*&);
+        const T& trouverMax(Noeud*&) const;
+        void vider(Noeud*&);
+        void copier(const Noeud*, Noeud*&) const;
 
 		/*
 		 * Ces fonctions sont implémentées à des fins de test.
 		 * Vous ne devez pas les utiliser dans vos implémentations, ni les modifier!
 		 */
-    int compter(Noeud *) const;
+        int compter(Noeud *) const;
 		Noeud * trouver(const T &) const;
-	  int hauteur(Noeud * n) const;
+	    int hauteur(Noeud * n) const;
 		int occurrence(Noeud * n, const T &) const;
 		void preparerafficher(const Noeud *, int, int &, T *, int *) const;
 
@@ -118,45 +127,52 @@ ArbreAVL<T>::ArbreAVL() : racine(nullptr) {
 
 template <class T>
 ArbreAVL<T>::ArbreAVL(const ArbreAVL<T> & autre) : racine(nullptr) {
-	// À compléter
+    copier(autre.racine, racine);
 }
 
 template <class T>
 ArbreAVL<T>::~ArbreAVL() {
-	// À compléter
+    vider(racine);
 }
 
 template <class T>
 bool ArbreAVL<T>::vide() const {
 	// À compléter
-	return false;
+	return racine == nullptr;
 }
 
 template <class T>
 void ArbreAVL<T>::vider() {
-	// À compléter
+    vider(racine);
+    racine = nullptr;
 }
 
 template <class T>
-bool ArbreAVL<T>::contient(const T & element) const {
-	// À compléter
-	return false;
+bool ArbreAVL<T>::contient(const T& element) const
+{
+    return contient(racine, element);
 }
 
 template <class T>
-void ArbreAVL<T>::inserer(const T & e) {
-	// À compléter
+void ArbreAVL<T>::inserer(const T& element)
+{
+    inserer(racine, element);
 }
 
 template <class T>
-void ArbreAVL<T>::enlever(const T & e) {
-	// À compléter
+void ArbreAVL<T>::enlever(const T& element)
+{
+    // À compléter.
+    if (racine != nullptr)
+        enlever(racine, element);
 }
 
 template <class T>
-ArbreAVL<T> & ArbreAVL<T>::operator = (const ArbreAVL & autre) {
-	// À compléter
-	return *this;
+ArbreAVL<T>& ArbreAVL<T>::operator=(const ArbreAVL& autre) {
+    if(this==&autre) return *this;
+    vider();
+    copier(autre.racine, racine);
+    return *this;
 }
 
 template <class T>
@@ -182,6 +198,167 @@ const T & ArbreAVL<T>::operator[](const Iterateur & i) const {
 
 /************ Fonctions privées ***************/
 
+template <class T>
+bool ArbreAVL<T>::contient(Noeud *noeud, const T& element) const {
+    if (noeud != nullptr) {
+        if (element == noeud->contenu)
+            return true;
+        if (element < noeud->contenu)
+            return contient(noeud->gauche, element);
+        else
+            return contient(noeud->droite, element);
+    } else
+        return false;
+}
+
+template <class T>
+void ArbreAVL<T>::copier(const Noeud* source, Noeud*& noeud) const
+{
+    // À compléter.
+    if (source != nullptr) {
+        noeud = new Noeud(source->contenu);
+        noeud->equilibre = source->equilibre;
+        copier(source->gauche, noeud->gauche);
+        copier(source->droite, noeud->droite);
+    }
+}
+
+template <class T>
+bool ArbreAVL<T>::inserer(Noeud*& noeud, const T& element)
+{
+    if(noeud==nullptr)
+    {
+        noeud = new Noeud(element);
+        return true;
+    }
+    if(element < noeud->contenu){
+        if(inserer(noeud->gauche, element))
+        {
+            noeud->equilibre++;
+            if(noeud->equilibre == 0)
+                return false;
+            if(noeud->equilibre == 1)
+                return true;
+            assert(noeud->equilibre==2);
+            if(noeud->gauche->equilibre == -1)
+                rotationDroiteGauche(noeud->gauche);
+            rotationGaucheDroite(noeud);
+        }
+        return false;
+    }
+    else if (noeud->contenu < element){
+        if (inserer(noeud->droite, element)) {
+            noeud->equilibre--;
+            if (noeud->equilibre == 0)
+                return false;
+            if (noeud->equilibre == -1)
+                return true;
+            assert(noeud->equilibre == -2);
+            if (noeud->droite->equilibre == 1)
+                rotationGaucheDroite(noeud->droite);
+            rotationDroiteGauche(noeud);
+        }
+        return false;
+    }
+    // element == noeud->contenu
+    noeud->contenu = element;  // Mise à jour
+    return false;
+}
+
+template <class T>
+void ArbreAVL<T>::vider(Noeud*& noeud)
+{
+    if (noeud != nullptr) {
+        if (noeud->gauche != nullptr)
+            vider(noeud->gauche);
+        if (noeud->droite != nullptr)
+            vider(noeud->droite);
+        delete(noeud);
+    }
+}
+
+template <class T>
+void ArbreAVL<T>::rotationGaucheDroite(Noeud*& racinesousarbre)
+{
+    Noeud *temp = racinesousarbre->gauche;
+    int  ea = temp->equilibre;
+    int  eb = racinesousarbre->equilibre;
+    int  neb = -(ea>0 ? ea : 0) - 1 + eb;
+    int  nea = ea + (neb < 0 ? neb : 0) - 1;
+
+    temp->equilibre = nea;
+    racinesousarbre->equilibre = neb;
+    racinesousarbre->gauche = temp->droite;
+    temp->droite = racinesousarbre;
+    racinesousarbre = temp;
+}
+
+template <class T>
+void ArbreAVL<T>::rotationDroiteGauche(Noeud*& racinesousarbre)
+{
+    Noeud *tmp = racinesousarbre->droite;
+    int eb = tmp->equilibre;
+    int ea = racinesousarbre->equilibre;
+    int nea = -(eb < 0 ? eb : 0) + 1 + ea;
+    int neb = (nea > 0 ? nea : 0) + 1 + eb;
+
+    tmp->equilibre = neb;
+    racinesousarbre->equilibre = nea;
+    racinesousarbre->droite = tmp->gauche;
+    tmp->gauche = racinesousarbre;
+    racinesousarbre = tmp;
+}
+
+template<class T>
+const T &ArbreAVL<T>::trouverMax(Noeud *& noeud) const {
+    assert(noeud != nullptr);
+    if (noeud->droite != nullptr)
+        return trouverMax(noeud->droite);
+    else return noeud->contenu;
+}
+
+template <class T>
+bool ArbreAVL<T>::enlever(Noeud *&noeud, const T& element) {
+    if (noeud != nullptr) {
+        if (element < noeud->contenu) { //Cas de gauche
+            bool retour = false;
+            if (enlever(noeud->gauche, element)) {
+                noeud->equilibre--;
+                if (noeud->equilibre == -1) return false;   //  Correction labo : impossible que l'équilibre soit 1
+                if (noeud->equilibre == 0) return true;
+                assert(noeud->equilibre == -2); // Arbre déséquilibré, donc il faut le rééquilibrer avec des rotations.
+                retour = noeud->droite->equilibre != 0;
+                if (noeud->droite->equilibre == 1) rotationGaucheDroite
+                            (noeud->droite);
+                rotationDroiteGauche(noeud);
+            }
+            return retour;
+        }
+        if (element > noeud->contenu) { //Cas de droite
+            bool retour = false;
+            if (enlever(noeud->droite, element)) {
+                noeud->equilibre++;
+                if (noeud->equilibre == 1) return false;
+                if (noeud->equilibre == 0) return true;
+                assert(noeud->equilibre == 2);  // Arbre déséquilibré, donc il faut le rééquilibrer avec des rotations.
+                retour = noeud->gauche->equilibre != 0;
+                if (noeud->gauche->equilibre == -1) rotationDroiteGauche
+                            (noeud->gauche);
+                rotationGaucheDroite(noeud);
+            }
+            return retour;
+        }
+        //  Cas element == noeud->element
+        Noeud *tmp = noeud;
+        if (noeud->gauche == nullptr) { noeud = noeud->droite; delete(tmp);
+            return true; }
+        if (noeud->droite == nullptr) { noeud = noeud->gauche; delete(tmp);
+            return true; }
+        noeud->contenu = trouverMax(noeud->gauche);
+        return enlever(noeud->gauche, noeud->contenu);
+    } else
+        return false;
+}
 
 /************ Iterateur ***************/
 
