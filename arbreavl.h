@@ -11,6 +11,7 @@
 
 #include <assert.h>
 #include "pile.h"
+#include <iostream> //  À enlever (tests)
 
 template <class T>
 class ArbreAVL {
@@ -80,13 +81,14 @@ class ArbreAVL {
 		/**** N'oubliez d'expliquer son fonctionnement en commentaire *******************/
 		/**** Ça s'applique également sur les attributs privés de le classe Itérateur ***/
         bool inserer(Noeud*&, const T&);
-        bool contient(Noeud *, const T&) const;
+        bool contient(Noeud *, const T&) const; //Binding references
         bool enlever(Noeud *&, const T&);
         void rotationGaucheDroite(Noeud*&);
         void rotationDroiteGauche(Noeud*&);
         const T& trouverMax(Noeud*&) const;
         void vider(Noeud*&);
         void copier(const Noeud*, Noeud*&) const;
+        bool equals(const Noeud*, Noeud *) const;   //Binding references
 
 		/*
 		 * Ces fonctions sont implémentées à des fins de test.
@@ -178,7 +180,12 @@ ArbreAVL<T>& ArbreAVL<T>::operator=(const ArbreAVL& autre) {
 template <class T>
 bool ArbreAVL<T>::operator == (const ArbreAVL<T> & autre) const {
 	// À compléter
-	return false;
+    if (this == &autre)
+        return true;
+    else {
+        // À completer
+        return equals(autre.racine, racine);
+    }
 }
 
 template <class T>
@@ -358,6 +365,18 @@ bool ArbreAVL<T>::enlever(Noeud *&noeud, const T& element) {
         return enlever(noeud->gauche, noeud->contenu);
     } else
         return false;
+}
+
+template <class T>
+bool ArbreAVL<T>::equals(const Noeud *autre, Noeud *noeud) const {
+    if (autre == nullptr && noeud == nullptr)
+        return true;
+    if (autre == nullptr && noeud != nullptr || noeud == nullptr && autre !=
+    nullptr)
+        return false;
+    if (autre->contenu == noeud->contenu)
+        return equals(autre->gauche, noeud->gauche) &&
+        equals(autre->droite, noeud->droite);
 }
 
 /************ Iterateur ***************/
