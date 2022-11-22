@@ -30,10 +30,10 @@ class ArbreAVL {
 		 * implémenter pour le TP2 est identiques.
 		 */
 		bool vide() const;
-    void vider();
-    bool contient(const T &) const;
-    void inserer(const T &);
-    void enlever(const T &);
+        void vider();
+        bool contient(const T &) const;
+        void inserer(const T &);
+        void enlever(const T &);
    
 		/*
 		 * Retourne "true" si les arbres AVl ont exactement les mêmes 
@@ -45,7 +45,7 @@ class ArbreAVL {
 		 * Où n et m sont les tailles de deux arbres AVL à comparer. *
 		 *************************************************************
 		 */
-    bool operator == (const ArbreAVL<T> & autre) const;
+        bool operator == (const ArbreAVL<T> & autre) const;
 	
 		/*
 		 * Cet itérateur est basé sur un parcours inordre de l'arbre
@@ -54,7 +54,7 @@ class ArbreAVL {
 		class Iterateur;
 		Iterateur debut() const;
 		T & operator[] (const Iterateur &);
-    const T & operator[] (const Iterateur &) const;
+        const T & operator[] (const Iterateur &) const;
     
 		/* 
 		 * Ces fonctions sont implémentées à des fins de test et de diagnostique.
@@ -80,15 +80,49 @@ class ArbreAVL {
 		/**** Vous pouvez ajouter toute fonction privée nécessaire **********************/
 		/**** N'oubliez d'expliquer son fonctionnement en commentaire *******************/
 		/**** Ça s'applique également sur les attributs privés de le classe Itérateur ***/
+
+        /**
+         *
+         * @return
+         */
         bool inserer(Noeud*&, const T&);
+        /**
+         *
+         * @return
+         */
         bool contient(Noeud *, const T&) const; //Binding references
+        /**
+         *
+         * @return
+         */
         bool enlever(Noeud *&, const T&);
+        /**
+         *
+         */
         void rotationGaucheDroite(Noeud*&);
+        /**
+         *
+         */
         void rotationDroiteGauche(Noeud*&);
+        /**
+         *
+         * @return
+         */
         const T& trouverMax(Noeud*&) const;
+        /**
+         *
+         */
         void vider(Noeud*&);
+        /**
+         *
+         */
         void copier(const Noeud*, Noeud*&) const;
-        bool equals(const Noeud*, Noeud *) const;   //Binding references
+        /**
+         *
+         * @return
+         */
+        bool equals(const ArbreAVL<T> &) const;   //Binding references
+
 
 		/*
 		 * Ces fonctions sont implémentées à des fins de test.
@@ -139,7 +173,6 @@ ArbreAVL<T>::~ArbreAVL() {
 
 template <class T>
 bool ArbreAVL<T>::vide() const {
-	// À compléter
 	return racine == nullptr;
 }
 
@@ -164,7 +197,6 @@ void ArbreAVL<T>::inserer(const T& element)
 template <class T>
 void ArbreAVL<T>::enlever(const T& element)
 {
-    // À compléter.
     if (racine != nullptr)
         enlever(racine, element);
 }
@@ -179,28 +211,37 @@ ArbreAVL<T>& ArbreAVL<T>::operator=(const ArbreAVL& autre) {
 
 template <class T>
 bool ArbreAVL<T>::operator == (const ArbreAVL<T> & autre) const {
-	// À compléter
     if (this == &autre)
         return true;
-    else {
+    else
         // À completer
-        return equals(autre.racine, racine);
-    }
+        return equals(autre);
 }
 
 template <class T>
 typename ArbreAVL<T>::Iterateur ArbreAVL<T>::debut() const {
 	// À compléter
+    auto iter = Iterateur(*this);
+    iter.courant = racine;
+    while (iter.courant->gauche != nullptr) {
+        iter.chemin.empiler(iter.courant);
+        iter.courant = iter.courant->gauche;
+    }
+    return iter;
 }
 
 template <class T>
 T & ArbreAVL<T>::operator[](const Iterateur & i) {
 	// À compléter
+    assert(i.courant);
+    return i.courant->contenu;
 }
 
 template <class T>
 const T & ArbreAVL<T>::operator[](const Iterateur & i) const {
 	// À compléter
+    assert(i.courant);
+    return i.courant->contenu;
 }
 
 /************ Fonctions privées ***************/
@@ -327,7 +368,7 @@ const T &ArbreAVL<T>::trouverMax(Noeud *& noeud) const {
 template <class T>
 bool ArbreAVL<T>::enlever(Noeud *&noeud, const T& element) {
     if (noeud != nullptr) {
-        if (element < noeud->contenu) { //Cas de gauche
+        if (element < noeud->contenu) { // Cas de gauche
             bool retour = false;
             if (enlever(noeud->gauche, element)) {
                 noeud->equilibre--;
@@ -368,15 +409,22 @@ bool ArbreAVL<T>::enlever(Noeud *&noeud, const T& element) {
 }
 
 template <class T>
-bool ArbreAVL<T>::equals(const Noeud *autre, Noeud *noeud) const {
-    if (autre == nullptr && noeud == nullptr)
-        return true;
-    if (autre == nullptr && noeud != nullptr || noeud == nullptr && autre !=
-    nullptr)
+bool ArbreAVL<T>::equals(const ArbreAVL<T> &autre) const {
+    Iterateur iterThis = debut();
+    Iterateur iter = autre.debut();
+    while (iterThis && iter) {
+        ++iter;
+        ++iterThis;
+    }
+    if (iter && !iterThis || !iter && iterThis)
         return false;
-    if (autre->contenu == noeud->contenu)
-        return equals(autre->gauche, noeud->gauche) &&
-        equals(autre->droite, noeud->droite);
+    Iterateur copyIterAutre = autre.debut();
+    bool contains = true;
+    while (contains && copyIterAutre) {
+        contains = contient(racine, autre[copyIterAutre]);
+        ++copyIterAutre;
+    }
+    return contains;
 }
 
 /************ Iterateur ***************/
@@ -392,19 +440,29 @@ ArbreAVL<T>::Iterateur::Iterateur(const Iterateur & i) : arbre_associe(i.arbre_a
 template <class T>
 typename ArbreAVL<T>::Iterateur ArbreAVL<T>::Iterateur::operator++(int) {
 	// À compléter
-	return *this;
+    assert(courant);
+
 }
+
 
 template <class T>
 typename ArbreAVL<T>::Iterateur& ArbreAVL<T>::Iterateur::operator++() {
-	// À compléter
+    assert(courant);
+    Noeud *suivant = courant->droite;
+    while (suivant) {
+        chemin.empiler(suivant);
+        suivant = suivant->gauche;
+    }
+    if (!chemin.vide())
+        courant = chemin.depiler();
+    else
+        courant = nullptr;
 	return *this;
 }
 
 template <class T>
 ArbreAVL<T>::Iterateur::operator bool() const {
-	// À compléter
-	return false;
+	return courant != nullptr;
 }
 
 /************ Fonctions de tests ***************/

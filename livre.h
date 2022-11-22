@@ -73,14 +73,34 @@ class Livre {
 
 Livre::Livre(unsigned long i = 0, std::string a = "", std::string t = "", int s = 0) {
 	// À compléter
+    isbn = i;
+    auteur = a;
+    titre = t;
+    total = s;
 }
 
 Livre::Livre(std::string & ligne) {
 	// À compléter
+    std::string sub = ligne;
+    unsigned short indice = sub.find(';');
+    titre = sub.substr(0, indice);
+    sub = sub.substr(indice + 1);
+    indice = sub.find(';');
+    isbn = std::stol(sub.substr(0, indice));
+    sub = sub.substr(indice + 1);
+    indice = sub.find(';');
+    auteur = sub.substr(0, indice);
+    sub = sub.substr(indice + 1);
+    indice = sub.find(';');
+    total = std::stoi(sub.substr(0, indice));
 }
 
 Livre::Livre(const Livre & l) {
 	// À compléter
+    isbn = l.isbn;
+    auteur = l.auteur;
+    titre = l.titre;
+    total = l.total;
 }
 
 Livre::~Livre() {
@@ -88,32 +108,54 @@ Livre::~Livre() {
 
 int Livre::copies() const {
 	// À compléter
-	return 0;
+	return total;
 }
 
 Livre & Livre::operator = (const Livre & autre) {
 	// À compléter
+    if (this != &autre) {
+        auteur = autre.auteur;
+        titre = autre.titre;
+        if (*this == autre)
+            total += autre.total;
+        else {
+            total = autre.total;
+            isbn = autre.isbn;
+        }
+    }
 	return * this;
 }
 
 bool Livre::operator == (const Livre & autre) const {
 	// À compléter
-	return false;
+    if (this == &autre)
+        return true;
+    else
+	    return isbn == autre.isbn;
 }
 
 bool Livre::operator != (const Livre & autre) const {
 	// À compléter
-	return false;
+    if (this == &autre)
+        return false;
+    else
+	    return isbn != autre.isbn;
 }
 
 bool Livre::operator < (const Livre & autre) const {
 	// À compléter
-	return false;
+    if (this == &autre)
+        return false;
+    else
+        return isbn < autre.isbn;
 }
 
 bool Livre::operator > (const Livre & autre) const {
 	// À compléter
-	return false;
+    if (this == &autre)
+        return false;
+    else
+	    return isbn > autre.isbn;
 }
 
 std::ostream & operator << (std::ostream & os, const Livre & l) {
