@@ -405,20 +405,14 @@ bool ArbreAVL<T>::enlever(Noeud *&noeud, const T& element) {
 template <class T>
 bool ArbreAVL<T>::equals(const ArbreAVL<T> &autre) const {
     Iterateur iterThis = debut();
-    Iterateur iter = autre.debut();
-    while (iterThis && iter) {
-        ++iter;
+    Iterateur iterAutre = autre.debut();
+    bool continu = true;
+    while (continu && iterThis && iterAutre) {
+        continu = contient(racine, autre[iterAutre]);
+        ++iterAutre;
         ++iterThis;
     }
-    if (iter && !iterThis || !iter && iterThis)
-        return false;
-    Iterateur copyIterAutre = autre.debut();
-    bool contains = true;
-    while (contains && copyIterAutre) {
-        contains = contient(racine, autre[copyIterAutre]);
-        ++copyIterAutre;
-    }
-    return contains;
+    return continu && !(iterAutre && !iterThis || !iterAutre && iterThis);
 }
 
 /************ Iterateur ***************/
