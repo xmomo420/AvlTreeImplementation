@@ -429,7 +429,9 @@ template <class T>
 typename ArbreAVL<T>::Iterateur ArbreAVL<T>::Iterateur::operator++(int) {
 	// À compléter
     assert(courant);
-
+    Iterateur duplication = Iterateur(*this);
+    operator++();
+    return duplication;
 }
 
 
