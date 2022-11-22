@@ -25,3 +25,4 @@ add_executable(inf3105_tp2_a22
         librairie.h
         livre.h
         pile.h)
+

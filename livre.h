@@ -72,7 +72,6 @@ class Livre {
 };
 
 Livre::Livre(unsigned long i = 0, std::string a = "", std::string t = "", int s = 0) {
-	// À compléter
     isbn = i;
     auteur = a;
     titre = t;
@@ -80,7 +79,6 @@ Livre::Livre(unsigned long i = 0, std::string a = "", std::string t = "", int s 
 }
 
 Livre::Livre(std::string & ligne) {
-	// À compléter
     std::string sub = ligne;
     unsigned short indice = sub.find(';');
     titre = sub.substr(0, indice);
@@ -96,7 +94,6 @@ Livre::Livre(std::string & ligne) {
 }
 
 Livre::Livre(const Livre & l) {
-	// À compléter
     isbn = l.isbn;
     auteur = l.auteur;
     titre = l.titre;
@@ -107,12 +104,10 @@ Livre::~Livre() {
 }
 
 int Livre::copies() const {
-	// À compléter
 	return total;
 }
 
 Livre & Livre::operator = (const Livre & autre) {
-	// À compléter
     if (this != &autre) {
         auteur = autre.auteur;
         titre = autre.titre;
@@ -127,7 +122,6 @@ Livre & Livre::operator = (const Livre & autre) {
 }
 
 bool Livre::operator == (const Livre & autre) const {
-	// À compléter
     if (this == &autre)
         return true;
     else
@@ -135,7 +129,6 @@ bool Livre::operator == (const Livre & autre) const {
 }
 
 bool Livre::operator != (const Livre & autre) const {
-	// À compléter
     if (this == &autre)
         return false;
     else
@@ -143,7 +136,6 @@ bool Livre::operator != (const Livre & autre) const {
 }
 
 bool Livre::operator < (const Livre & autre) const {
-	// À compléter
     if (this == &autre)
         return false;
     else
@@ -151,7 +143,6 @@ bool Livre::operator < (const Livre & autre) const {
 }
 
 bool Livre::operator > (const Livre & autre) const {
-	// À compléter
     if (this == &autre)
         return false;
     else

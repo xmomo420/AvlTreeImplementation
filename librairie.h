@@ -57,7 +57,7 @@ class Librairie {
 		 * classe Livre) que la librairie en paramètre.
 		 */
 		bool operator == (const Librairie & autre) const;
-        void afficher() const;  // À enlever
+
 	private:
 		ArbreAVL<Livre> lib;
 		/**** Vous pouvez ajouter toute fonction privée nécessaire ***********/
@@ -75,24 +75,20 @@ Librairie::~Librairie() {
 }
 
 Librairie & Librairie::operator = (const Librairie & autre) {
-	// À compléter
     if (this != &autre)
         lib = autre.lib;
 	return * this;
 }
 
 void Librairie::inserer(Livre & l) {
-    // À compléter
 	lib.inserer(l);
 }
 
 bool Librairie::contient(const Livre & l) const {
-	// À compléter
 	return lib.contient(l);
 }
 
 int Librairie::total(Livre & l) const {
-	// À compléter
     return chercher(l).copies();
 }
 
@@ -110,7 +106,6 @@ Livre Librairie::trouver(unsigned long l) const {
 }
 
 void Librairie::fusionner(Librairie & bib) {
-	// À compléter
     ArbreAVL<Livre>::Iterateur iter = bib.lib.debut();
     while (iter) {
         lib.inserer(bib.lib[iter]);
@@ -119,7 +114,6 @@ void Librairie::fusionner(Librairie & bib) {
 }
 
 bool Librairie::operator == (const Librairie & autre) const {
-	// À compléter
   return lib == autre.lib;
 }
 
@@ -136,14 +130,5 @@ Livre Librairie::chercher(Livre &livre) const {
         return defaut;
     }
 }
-
-void Librairie::afficher() const {
-    ArbreAVL<Livre>::Iterateur iter = lib.debut();
-    while (iter) {
-        std::cout << lib[iter] << std::endl;
-        ++iter;
-    }
-}
-
 
 #endif

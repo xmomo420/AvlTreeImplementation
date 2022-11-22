@@ -11,7 +11,6 @@
 
 #include <assert.h>
 #include "pile.h"
-#include <iostream> //  À enlever (tests)
 
 template <class T>
 class ArbreAVL {
@@ -214,13 +213,11 @@ bool ArbreAVL<T>::operator == (const ArbreAVL<T> & autre) const {
     if (this == &autre)
         return true;
     else
-        // À completer
         return equals(autre);
 }
 
 template <class T>
 typename ArbreAVL<T>::Iterateur ArbreAVL<T>::debut() const {
-	// À compléter
     auto iter = Iterateur(*this);
     iter.courant = racine;
     while (iter.courant->gauche != nullptr) {
@@ -232,14 +229,12 @@ typename ArbreAVL<T>::Iterateur ArbreAVL<T>::debut() const {
 
 template <class T>
 T & ArbreAVL<T>::operator[](const Iterateur & i) {
-	// À compléter
     assert(i.courant);
     return i.courant->contenu;
 }
 
 template <class T>
 const T & ArbreAVL<T>::operator[](const Iterateur & i) const {
-	// À compléter
     assert(i.courant);
     return i.courant->contenu;
 }
@@ -262,7 +257,6 @@ bool ArbreAVL<T>::contient(Noeud *noeud, const T& element) const {
 template <class T>
 void ArbreAVL<T>::copier(const Noeud* source, Noeud*& noeud) const
 {
-    // À compléter.
     if (source != nullptr) {
         noeud = new Noeud(source->contenu);
         noeud->equilibre = source->equilibre;
