@@ -218,7 +218,7 @@ bool ArbreAVL<T>::operator == (const ArbreAVL<T> & autre) const {
 
 template <class T>
 typename ArbreAVL<T>::Iterateur ArbreAVL<T>::debut() const {
-    auto iter = Iterateur(*this);
+    Iterateur iter = Iterateur(*this);
     iter.courant = racine;
     while (iter.courant->gauche != nullptr) {
         iter.chemin.empiler(iter.courant);

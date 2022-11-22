@@ -93,7 +93,7 @@ int Librairie::total(Livre & l) const {
 }
 
 Livre Librairie::trouver(unsigned long l) const {
-    auto livre = Livre(l);
+    Livre livre = Livre(l);
     ArbreAVL<Livre>::Iterateur iter = lib.debut();
     while (iter && lib[iter] != livre)
         ++iter;
@@ -126,7 +126,7 @@ Livre Librairie::chercher(Livre &livre) const {
     if (iter)
         return lib[iter];
     else {
-        auto defaut = Livre();
+        Livre defaut = Livre();
         return defaut;
     }
 }
