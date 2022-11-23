@@ -15,8 +15,8 @@
 template <class T>
 class ArbreAVL {
 	/**** Vous n'avez pas le droit de modifier l'interface publique de cette classe ******/
-  /**** Vous n'avez donc pas le droit d'ajouter des fonctions publiques ni de **********/
-  /**** modifier les signatures des fonctions publiques ********************************/
+    /**** Vous n'avez donc pas le droit d'ajouter des fonctions publiques ni de **********/
+    /**** modifier les signatures des fonctions publiques ********************************/
 	/**** Ça s'applique également sur les fonctions publiques de le classe Itérateur *****/
   public:
     ArbreAVL();
@@ -81,8 +81,9 @@ class ArbreAVL {
 		/**** Ça s'applique également sur les attributs privés de le classe Itérateur ***/
 
         /**
-         *
-         * @return
+         * Permet d'insérer l'élément passé en paramètre dans le noeud passé
+         * par référence en paramètre.
+         * @return true si l'élément à été insérer, false sinon.
          */
         bool inserer(Noeud*&, const T&);
         /**
@@ -91,34 +92,44 @@ class ArbreAVL {
          */
         bool contient(Noeud *, const T&) const; //Binding references
         /**
-         *
-         * @return
+         * Permet d'enlever l'élément passé en paramètre du noeud passé en
+         * paramètre.
+         * @return true si l'élément à été enlevé du noeud, false si
+         * l'élément n'est pas contenu dedans.
          */
         bool enlever(Noeud *&, const T&);
         /**
-         *
-         */
+        *  Effectue une rotation de la droite vers la gauche sur le noeud
+        *  passé par référence en paramètre, ajuste également les indices
+        *  d'équilibre affectés.
+        */
         void rotationGaucheDroite(Noeud*&);
         /**
-         *
+         *  Effectue une rotation de la gauche vers la droite sur le noeud
+         *  passé par référence en paramètre, ajuste également les indices
+         *  d'équilibre affectés.
          */
         void rotationDroiteGauche(Noeud*&);
         /**
-         *
-         * @return
+         * Permet de trouver l'élément de plus élément le plus supérieur dans
+         * le noeud passé en paramètre.
+         * @return l'élément trouvé.
          */
         const T& trouverMax(Noeud*&) const;
         /**
-         *
+         *  Vide le noeud passé en paramètre.
          */
         void vider(Noeud*&);
         /**
-         *
+         *  Copie le noeud passé en paramètre dans la référence d'un noeud
+         *  qui est également passé en paramètre.
          */
         void copier(const Noeud*, Noeud*&) const;
         /**
-         *
-         * @return
+         * Vérifie si l'arbre passé en paramètre est égal à l'arbre courant,
+         * c'est-à-dire s'ils ont le même nombre de noeuds et les mêmes
+         * éléments.
+         * @return true si les deux arbres sont égaux, false sinon.
          */
         bool equals(const ArbreAVL<T> &) const;   //Binding references
 
@@ -427,7 +438,6 @@ ArbreAVL<T>::Iterateur::Iterateur(const Iterateur & i) : arbre_associe(i.arbre_a
 
 template <class T>
 typename ArbreAVL<T>::Iterateur ArbreAVL<T>::Iterateur::operator++(int) {
-	// À compléter
     assert(courant);
     Iterateur duplication = Iterateur(*this);
     operator++();

@@ -63,6 +63,11 @@ class Librairie {
 		/**** Vous pouvez ajouter toute fonction privée nécessaire ***********/
         /**** N'oubliez pas d'expliquer son fonctionnement en commentaire ****/
 
+        /**
+         * Cherche un Livre avec le livre passé en paramètre.
+         * @return le Livre s'il a été trouvé, un Livre vide
+         * (Constructeur par défaut de la classe Livre) sinon.
+         */
         Livre chercher(Livre &) const;
 
 
