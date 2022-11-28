@@ -90,7 +90,7 @@ class ArbreAVL {
          *
          * @return
          */
-        bool contient(Noeud *, const T&) const; //Binding references
+        bool contient(const Noeud *, const T&) const; //Binding references
         /**
          * Permet d'enlever l'élément passé en paramètre du noeud passé en
          * paramètre.
@@ -99,13 +99,13 @@ class ArbreAVL {
          */
         bool enlever(Noeud *&, const T&);
         /**
-        *  Effectue une rotation de la droite vers la gauche sur le noeud
+        *  Effectue une rotation de la gauche vers la droite sur le noeud
         *  passé par référence en paramètre, ajuste également les indices
         *  d'équilibre affectés.
         */
         void rotationGaucheDroite(Noeud*&);
         /**
-         *  Effectue une rotation de la gauche vers la droite sur le noeud
+         *  Effectue une rotation de la droite vers la gauche sur le noeud
          *  passé par référence en paramètre, ajuste également les indices
          *  d'équilibre affectés.
          */
@@ -253,7 +253,7 @@ const T & ArbreAVL<T>::operator[](const Iterateur & i) const {
 /************ Fonctions privées ***************/
 
 template <class T>
-bool ArbreAVL<T>::contient(Noeud *noeud, const T& element) const {
+bool ArbreAVL<T>::contient(const Noeud *noeud, const T& element) const {
     if (noeud != nullptr) {
         if (element == noeud->contenu)
             return true;

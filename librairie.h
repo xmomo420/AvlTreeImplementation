@@ -68,7 +68,7 @@ class Librairie {
          * @return le Livre s'il a été trouvé, un Livre vide
          * (Constructeur par défaut de la classe Livre) sinon.
          */
-        Livre chercher(Livre &) const;
+        Livre chercher(const Livre &) const;
 
 
 };
@@ -124,7 +124,7 @@ bool Librairie::operator == (const Librairie & autre) const {
 
 /************ Fonctions privées ***************/
 
-Livre Librairie::chercher(Livre &livre) const {
+Livre Librairie::chercher(const Livre &livre) const {
     ArbreAVL<Livre>::Iterateur iter = lib.debut();
     while (iter && lib[iter] != livre)
         ++iter;
