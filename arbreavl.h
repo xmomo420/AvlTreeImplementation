@@ -213,18 +213,16 @@ void ArbreAVL<T>::enlever(const T& element)
 
 template <class T>
 ArbreAVL<T>& ArbreAVL<T>::operator=(const ArbreAVL& autre) {
-    if(this==&autre) return *this;
-    vider();
-    copier(autre.racine, racine);
+    if(this != &autre ) {
+        vider();
+        copier(autre.racine, racine);
+    }
     return *this;
 }
 
 template <class T>
 bool ArbreAVL<T>::operator == (const ArbreAVL<T> & autre) const {
-    if (this == &autre)
-        return true;
-    else
-        return equals(autre);
+    return this == &autre || equals(autre);
 }
 
 template <class T>
@@ -240,13 +238,13 @@ typename ArbreAVL<T>::Iterateur ArbreAVL<T>::debut() const {
 
 template <class T>
 T & ArbreAVL<T>::operator[](const Iterateur & i) {
-    assert(i.courant);
+    assert(i);
     return i.courant->contenu;
 }
 
 template <class T>
 const T & ArbreAVL<T>::operator[](const Iterateur & i) const {
-    assert(i.courant);
+    assert(i);
     return i.courant->contenu;
 }
 

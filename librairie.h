@@ -119,7 +119,7 @@ void Librairie::fusionner(Librairie & bib) {
 }
 
 bool Librairie::operator == (const Librairie & autre) const {
-  return lib == autre.lib;
+  return this == &autre || lib == autre.lib;
 }
 
 /************ Fonctions privées ***************/

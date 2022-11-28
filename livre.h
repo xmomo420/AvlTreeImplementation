@@ -122,31 +122,19 @@ Livre & Livre::operator = (const Livre & autre) {
 }
 
 bool Livre::operator == (const Livre & autre) const {
-    if (this == &autre)
-        return true;
-    else
-	    return isbn == autre.isbn;
+    return this == &autre || isbn == autre.isbn;
 }
 
 bool Livre::operator != (const Livre & autre) const {
-    if (this == &autre)
-        return false;
-    else
-	    return isbn != autre.isbn;
+    return this != &autre && isbn != autre.isbn;
 }
 
 bool Livre::operator < (const Livre & autre) const {
-    if (this == &autre)
-        return false;
-    else
-        return isbn < autre.isbn;
+    return this != &autre && isbn < autre.isbn;
 }
 
 bool Livre::operator > (const Livre & autre) const {
-    if (this == &autre)
-        return false;
-    else
-	    return isbn > autre.isbn;
+    return this != &autre && isbn > autre.isbn;
 }
 
 std::ostream & operator << (std::ostream & os, const Livre & l) {
